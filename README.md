@@ -2,6 +2,10 @@
 
 **Deep Learning + Computer Vision + Healthcare AI**
 
+## Problem Statement
+
+Medical imaging such as chest X-rays is commonly used to detect lung diseases like pneumonia. While deep learning models can automatically analyze these images, many systems only give a prediction without showing where the disease is present, and sometimes the predictions may not be reliable. This project aims to develop a Medical Imaging Quality Assurance System that uses a pretrained deep learning model to detect pneumonia in chest X-ray images, highlight the affected region in the image, and evaluate the confidence of the prediction. If the model’s confidence is low, the system will flag the case for expert review to ensure accurate and reliable diagnosis.
+
 ## Overview
 
 The **Medical Imaging Quality Assurance System** is an AI-powered healthcare application designed to automatically screen **Chest X-ray images for Pneumonia**. The system uses deep learning and computer vision techniques to analyze X-ray images and assist medical professionals in early diagnosis.
