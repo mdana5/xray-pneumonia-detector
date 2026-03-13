@@ -24,6 +24,8 @@ This project integrates **deep learning, medical image preprocessing, automated 
 
 # System Architecture
 
+![System Architecture](docs/architecture.png)
+
 The system workflow follows these steps:
 
 1. Input chest X-ray image is uploaded.
