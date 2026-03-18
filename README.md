@@ -19,7 +19,6 @@ This project integrates **deep learning, medical image preprocessing, automated 
 # Project Objectives
 
 * Build a **deep learning model** capable of detecting pneumonia from chest X-ray images.
-* Use **MONAI-based preprocessing techniques** to enhance medical image quality.
 * Implement a **confidence-based routing system** to decide whether a prediction should be automated or reviewed by a radiologist.
 * Create an **API service using FastAPI** to serve model predictions.
 * Package the system inside a **Docker container for easy deployment**.
@@ -33,15 +32,13 @@ This project integrates **deep learning, medical image preprocessing, automated 
 The system workflow follows these steps:
 
 1. Input chest X-ray image is uploaded.
-2. Image undergoes **medical preprocessing using MONAI transforms**.
-3. Processed image is passed to the **deep learning classification model**.
-4. The model outputs a **prediction probability**.
+2. Image undergoes preprocessing using CLAHE-based enhancement and normalization.
+3. Processed image is passed to the deep learning classification model.
+4. The model outputs a prediction probability.
 5. If the confidence score is above a predefined threshold:
-
-   * Prediction is returned automatically.
-6. If confidence is below the threshold:
-
-   * Image is moved to a **pending_review folder** for radiologist evaluation.
+   - Prediction is returned automatically.
+6. If confidence is below the threshold
+    * Image is moved to a **pending_review folder** for radiologist evaluation.
 
 ---
 
@@ -57,48 +54,21 @@ A deep learning model is trained to classify chest X-ray images into:
 Transfer learning techniques are used with architectures such as:
 
 * ResNet50
-* DenseNet121
+* MobileNet
 
-These architectures help improve performance even with limited medical datasets.
+A lightweight ensemble approach is used to balance performance and computational efficiency.
 
 ---
 
-### 2. MONAI-Based Medical Image Preprocessing
+### 2. Image Preprocessing (CLAHE-Based Enhancement)
 
-Medical images require specialized preprocessing. This project uses **MONAI transforms** for robust preprocessing and augmentation.
+To improve the quality of chest X-ray images, Contrast Limited Adaptive Histogram Equalization (CLAHE) is used. This enhances image contrast and makes important features more visible for the model.
 
-Preprocessing pipeline includes:
-
-* Image loading
-* Channel normalization
-* Intensity scaling
-* Spatial resizing
-* Medical data augmentation
-
-Example MONAI preprocessing pipeline:
-
-```python
-from monai.transforms import (
-    Compose,
-    LoadImage,
-    EnsureChannelFirst,
-    ScaleIntensity,
-    Resize,
-    RandFlip,
-    RandRotate
-)
-
-transforms = Compose([
-    LoadImage(image_only=True),
-    EnsureChannelFirst(),
-    ScaleIntensity(),
-    Resize((224,224)),
-    RandFlip(prob=0.5),
-    RandRotate(range_x=0.2, prob=0.5)
-])
-```
-
-These transforms ensure the X-ray images are standardized before being fed into the model.
+Preprocessing steps include:
+* Image resizing
+* Normalization
+* CLAHE contrast enhancement
+* Data augmentation (rotation, flipping, brightness adjustment)
 
 ---
 
@@ -109,13 +79,12 @@ A custom dataset pipeline is implemented to efficiently load medical images.
 The dataset generator:
 
 * Reads X-ray images
-* Applies MONAI preprocessing
 * Returns tensors ready for deep learning models
 
 Example:
 
 ```python
-from monai.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader
 
 dataset = Dataset(data=image_files, transform=transforms)
 loader = DataLoader(dataset, batch_size=16, shuffle=True)
@@ -123,7 +92,7 @@ loader = DataLoader(dataset, batch_size=16, shuffle=True)
 
 ---
 
-### 4. Human-in-the-Loop Decision System
+### 4. Confidence-Based Human-in-the-Loop System
 
 Healthcare AI must be reliable. This project implements a **confidence threshold mechanism**.
 
@@ -167,7 +136,7 @@ POST /predict
 Workflow:
 
 1. Upload chest X-ray
-2. Preprocess with MONAI
+2. Preprocess image using CLAHE-based enhancement
 3. Run model inference
 4. Return prediction or route to review
 
@@ -221,7 +190,7 @@ medical-imaging-quality-assurance-system
 │   └── pneumonia_classifier.pth
 │
 ├── preprocessing
-│   └── monai_transforms.py
+│   └── preprocessing.py
 │
 ├── api
 │   └── main.py
@@ -242,7 +211,7 @@ medical-imaging-quality-assurance-system
 
 * Python
 * PyTorch
-* MONAI
+* Grad-CAM
 * OpenCV
 * FastAPI
 * Docker
@@ -309,9 +278,15 @@ This provides an interactive API interface.
 
 ---
 -->
+## 7. Explainability using Grad-CAM
+
+To improve trust and interpretability, Grad-CAM is used to generate heatmaps that highlight the infected regions in the chest X-ray.
+
+This helps doctors understand why the model made a particular prediction.
+
 # Conclusion
 
-This project demonstrates how **AI and deep learning can assist healthcare professionals in medical diagnosis**. By integrating **MONAI preprocessing, deep learning classification, confidence-based routing, and human-in-the-loop review**, the system provides a safer and more reliable AI-assisted diagnostic workflow for chest X-ray analysis.
+This project demonstrates how AI and deep learning can assist healthcare professionals in medical diagnosis. By integrating custom preprocessing techniques including CLAHE, deep learning classification, confidence-based routing, and human-in-the-loop review, the system provides a safer and more reliable AI-assisted diagnostic workflow for chest X-ray analysis.
 
 Such systems have the potential to **improve diagnostic efficiency, reduce workload for radiologists, and enable faster detection of pneumonia in clinical settings**.
 
