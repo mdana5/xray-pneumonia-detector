@@ -1,0 +1,27 @@
+# Dataset images - never commit these
+data/images/
+data/processed/
+*.png
+*.jpg
+*.jpeg
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# Model weights - too large for Git
+*.pth
+*.pt
+*.h5
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
