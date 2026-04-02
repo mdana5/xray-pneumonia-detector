@@ -1,4 +1,4 @@
-torch
-torchvision
-opencv-python
+tensorflow>=2.13.0
 numpy
+opencv-python
+Pillow
