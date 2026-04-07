@@ -27,7 +27,7 @@ This project integrates **deep learning, medical image preprocessing, automated 
 
 # System Architecture
 
-![System Architecture](images/architecture.jpeg)
+![System Architecture](architecture.jpeg)
 
 The system workflow follows these steps:
 
